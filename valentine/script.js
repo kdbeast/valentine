@@ -45,7 +45,7 @@ function handleNoClick() {
 
 // ✅ Yes button logic
 function handleYesClick() {
-  window.location.href = "yes_page.html";
+  window.location.assign("./yes_page.html");
 }
 
 const heartsContainer = document.getElementById("hearts-container");
