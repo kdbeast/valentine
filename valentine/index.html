@@ -2,21 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <title>For You ❤️</title>
+    <title>Valentine 💖</title>
     <link rel="stylesheet" href="style.css" />
   </head>
   <body>
     <div class="container">
-      <h1 class="title">Hey Love 💌</h1>
+      <!-- STEP 1: NAME -->
+      <div id="name-step">
+        <h1 class="title">Hey 💕</h1>
+        <p>What’s your name?</p>
+        <input id="nameInput" type="text" placeholder="Enter your name" />
+        <button class="yes-button" onclick="startLove()">Continue 💌</button>
+      </div>
 
-      <p id="letter" class="letter"></p>
+      <!-- STEP 2: LOVE LETTER -->
+      <div id="love-step" style="display: none">
+        <h1 class="title" id="nameTitle"></h1>
 
-      <div class="buttons">
-        <button class="yes-button" onclick="handleYesClick()">Yes ❤️</button>
-        <button class="no-button" onclick="handleNoClick()">No 💔</button>
+        <div class="letter-box">
+          <p id="letter"></p>
+        </div>
+
+        <div class="buttons">
+          <button class="yes-button" id="yesBtn" onclick="handleYesClick()">
+            Yes ❤️
+          </button>
+          <button class="no-button" onclick="handleNoClick()">No 💔</button>
+        </div>
+      </div>
+
+      <!-- STEP 3: SUCCESS -->
+      <div id="yes-step" style="display: none">
+        <h1 class="title">YAYYYYY 🥰❤️</h1>
+        <div class="letter-box">
+          <p>
+            You just made my heart so happy 💖<br />
+            Best Valentine ever 💘
+          </p>
+        </div>
       </div>
     </div>
+
     <div id="hearts-container"></div>
+    <canvas id="confetti"></canvas>
 
     <script src="script.js"></script>
   </body>

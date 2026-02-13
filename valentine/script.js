@@ -1,69 +1,113 @@
-// 💬 Love letter text
-const text =
-  "I just wanted to say...\n" +
-  "You make my days brighter 🌸\n" +
-  "My smiles wider 😊\n" +
-  "And my heart happier ❤️\n\n" +
-  "Will you be my Valentine? 💘";
-
-// ⌨️ Typewriter effect
+const letterEl = document.getElementById("letter");
+let text = "";
 let index = 0;
-const letterElement = document.getElementById("letter");
+let yesScale = 1;
 
+// START LOVE
+function startLove() {
+  const name = document.getElementById("nameInput").value.trim();
+  if (!name) return alert("Please enter your name 💕");
+
+  document.getElementById("name-step").style.display = "none";
+  document.getElementById("love-step").style.display = "block";
+  document.getElementById("nameTitle").innerText = `Dear ${name} ❤️`;
+
+  text =
+    `I just wanted to say...\n` +
+    `You make my days brighter 🌸\n` +
+    `My smiles wider 😊\n` +
+    `And my heart happier ❤️\n\n` +
+    `So ${name}, will you be my Valentine? 💘`;
+
+  index = 0;
+  letterEl.innerHTML = "";
+  typeWriter();
+}
+
+// TYPEWRITER
 function typeWriter() {
   if (index < text.length) {
-    letterElement.innerHTML += text.charAt(index);
+    letterEl.innerHTML += text.charAt(index);
     index++;
-    setTimeout(typeWriter, 50);
+    setTimeout(typeWriter, 40);
   }
 }
-typeWriter();
 
-// 💔 No button messages
+// NO BUTTON
 const messages = [
   "Are you sure? 😢",
   "Think again 🥺",
-  "It will hurt my heart 💔",
+  "That hurts 💔",
   "Pleaseeee 😭",
-  "Okay now you HAVE to say yes 😏",
+  "Okay now say YES 😏",
 ];
+let msgIndex = 0;
 
-let messageIndex = 0;
-
-// ❌ No button logic (your code refined)
 function handleNoClick() {
-  const noButton = document.querySelector(".no-button");
-  const yesButton = document.querySelector(".yes-button");
+  const noBtn = document.querySelector(".no-button");
+  const yesBtn = document.getElementById("yesBtn");
 
-  noButton.textContent = messages[messageIndex];
-  messageIndex = (messageIndex + 1) % messages.length;
+  noBtn.textContent = messages[msgIndex];
+  msgIndex = (msgIndex + 1) % messages.length;
 
-  const currentSize = parseFloat(window.getComputedStyle(yesButton).fontSize);
-
-  yesButton.style.fontSize = `${currentSize * 1.4}px`;
+  yesScale += 0.25;
+  yesBtn.style.transform = `scale(${yesScale})`;
 }
 
-// ✅ Yes button logic
+// YES BUTTON
 function handleYesClick() {
-  window.location.assign("./yes_page.html");
+  document.getElementById("love-step").style.display = "none";
+  document.getElementById("yes-step").style.display = "block";
+  createConfetti();
+  drawConfetti();
 }
 
+// ❤️ HEARTS
 const heartsContainer = document.getElementById("hearts-container");
 
-function createHeart() {
+setInterval(() => {
   const heart = document.createElement("div");
-  heart.classList.add("heart");
-  heart.innerHTML = "❤️";
-
+  heart.className = "heart";
+  heart.innerText = "❤️";
   heart.style.left = Math.random() * 100 + "vw";
-  heart.style.fontSize = Math.random() * 20 + 15 + "px";
   heart.style.animationDuration = Math.random() * 3 + 3 + "s";
-
   heartsContainer.appendChild(heart);
+  setTimeout(() => heart.remove(), 6000);
+}, 400);
 
-  setTimeout(() => {
-    heart.remove();
-  }, 6000);
+// 🎉 CONFETTI
+const canvas = document.getElementById("confetti");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+const pieces = [];
+
+function createConfetti() {
+  for (let i = 0; i < 120; i++) {
+    pieces.push({
+      x: canvas.width / 2,
+      y: canvas.height / 2,
+      r: Math.random() * 6 + 4,
+      dx: Math.random() * 8 - 4,
+      dy: Math.random() * -8 - 4,
+      life: 100,
+      color: `hsl(${Math.random() * 360},100%,60%)`,
+    });
+  }
 }
 
-setInterval(createHeart, 400);
+function drawConfetti() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  pieces.forEach((p, i) => {
+    ctx.beginPath();
+    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+    ctx.fillStyle = p.color;
+    ctx.fill();
+    p.x += p.dx;
+    p.y += p.dy;
+    p.dy += 0.3;
+    p.life--;
+    if (p.life <= 0) pieces.splice(i, 1);
+  });
+  if (pieces.length) requestAnimationFrame(drawConfetti);
+}
